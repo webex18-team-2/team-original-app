@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router"
 import HomeView from "../views/HomeView.vue"
 import WriteView from "../views/WriteView.vue"
 import ReadView from "../views/ReadView.vue"
+import CalendarView from "../views/CalendarView.vue"
+import AnalysisView from "../views/AnalysisView.vue"
 
 const routes = [
   {
@@ -21,6 +23,16 @@ const routes = [
     path: "/read-page",
     name: "ReadPage",
     component: ReadView,
+  },
+  {
+    path: "/calendar",
+    name: "calendar",
+    component: "CalendarView",
+  },
+  {
+    path: "/analysis",
+    name: "analysis",
+    component: "AnalysisView",
   },
 ]
 
