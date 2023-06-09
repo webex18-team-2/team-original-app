@@ -27,12 +27,12 @@ const routes = [
   {
     path: "/calendar",
     name: "calendar",
-    component: "CalendarView",
+    component: CalendarView,
   },
   {
     path: "/analysis",
     name: "analysis",
-    component: "AnalysisView",
+    component: AnalysisView,
   },
 ]
 
