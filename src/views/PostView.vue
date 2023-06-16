@@ -114,7 +114,7 @@
   </div>
 
   <div class="views">
-    <h2>日記一覧（別ページに移設予定）</h2>
+    <h2>最近の日記（メインを別ページにやる）</h2>
     <div class="posts" v-for="(post, posts) in posts" :key="posts">
       ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー<br />
       <h3>
@@ -159,9 +159,22 @@ export default {
         content: this.post,
         作成日時: new Date(),
       });
+      localStorage.setItem(
+        "post",
+        JSON.stringify({
+          month: this.month,
+          day: this.day,
+          youbi: this.youbi,
+          theme: this.theme,
+          weather: this.weather,
+          point: this.point,
+          content: this.post,
+          作成日時: new Date(),
+        })
+      );
     },
     deletePost() {
-      this.posts.pop();
+      this.posts.pop() && localStorage.removeItem("access_posts");
     },
   },
   computed: {

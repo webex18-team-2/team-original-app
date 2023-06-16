@@ -1,7 +1,7 @@
 <template>
   <nav>
     <router-link to="/">トップ</router-link> |
-    <router-link to="/about">About</router-link> |
+    <router-link to="/about">日記一覧</router-link> |
     <router-link to="/post">新規投稿</router-link>
   </nav>
   <router-view />
