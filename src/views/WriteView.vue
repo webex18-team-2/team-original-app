@@ -1,5 +1,7 @@
 <template>
-  <h2>新規入力画面</h2>
+  <div class="a">
+    <h2>新規入力画面</h2>
+  </div>
   <div class="syousai">
     <div class="honbun_igai">
       <div class="month_and_theme_and_weather">
@@ -117,7 +119,7 @@
 
   <div class="views">
     <h2>最近の日記（メインを別ページにやる）</h2>
-    <div class="posts" v-for="(post, posts) in posts" :key="posts">
+    <div class="posts" v-for="(post, index) in posts" :key="index">
       ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー<br />
       <h3>
         日付：{{ post.year }}年{{ post.month }}月{{ post.date }}日（{{
@@ -130,7 +132,7 @@
       <br />
       {{ post.content }}
       <h4>作成日時：{{ post.createdAt }}</h4>
-      <button v-on:click="deletePost">削除</button>
+      <button v-on:click="deletePost(index)">削除</button>
     </div>
   </div>
 </template>
@@ -174,8 +176,12 @@ export default {
         JSON.stringify(this.posts)
       )
     },
-    deletePost() {
-      this.posts.pop()
+    deletePost(index) {
+      this.posts.splice(index, 1)
+      localStorage.setItem(
+        "diarylist", //これがキー
+        JSON.stringify(this.posts)
+      )
     },
   },
   computed: {
@@ -199,6 +205,9 @@ export default {
 </script>
 
 <style>
+.a {
+  text-align: center;
+}
 .point {
   width: 120px;
   height: 120px;
@@ -221,6 +230,10 @@ export default {
 .syousai {
   padding: 5px;
   background-color: khaki;
+  text-align: center;
+}
+.views {
+  text-align: center;
 }
 .posts {
   justify-content: center;
