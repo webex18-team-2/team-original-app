@@ -1,33 +1,16 @@
 <template>
-  <nav>
-    <router-link to="/">トップ</router-link> |
-    <router-link to="/about">日記一覧</router-link> |
-    <router-link to="/post">新規投稿</router-link>
-  </nav>
+  <div class="home">
+    <div>
+      <router-link to="/">HomePage|</router-link>
+
+      <router-link to="/write">入力画面|</router-link>
+
+      <router-link to="/read-page">閲覧画面|</router-link>
+
+      <router-link to="/calendar">カレンダー|</router-link>
+
+      <router-link to="/analysis">分析</router-link>
+    </div>
+  </div>
   <router-view />
 </template>
-
-<script></script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>

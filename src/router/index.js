@@ -1,7 +1,9 @@
-import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import PostView from "../views/PostView.vue";
-import AboutView from "../views/AboutView.vue";
+import { createRouter, createWebHistory } from "vue-router"
+import HomeView from "../views/HomeView.vue"
+import WriteView from "../views/WriteView.vue"
+import ReadView from "../views/ReadView.vue"
+import CalendarView from "../views/CalendarView.vue"
+import AnalysisView from "../views/AnalysisView.vue"
 
 const routes = [
   {
@@ -10,20 +12,33 @@ const routes = [
     component: HomeView,
   },
   {
-    path: "/post",
-    name: "post",
-    component: PostView,
+    path: "/write",
+    name: "write",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: WriteView,
   },
   {
-    path: "/about",
-    name: "about",
-    component: AboutView,
+    path: "/read-page",
+    name: "ReadPage",
+    component: ReadView,
   },
-];
+  {
+    path: "/calendar",
+    name: "calendar",
+    component: CalendarView,
+  },
+  {
+    path: "/analysis",
+    name: "analysis",
+    component: AnalysisView,
+  },
+]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-});
+})
 
-export default router;
+export default router
