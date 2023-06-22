@@ -7,7 +7,7 @@
       <div class="month_and_theme_and_weather">
         <h4>
           日付：
-          <input type="number" min="2023" v-model="year" placeholder="西暦で" />
+          <input type="number" v-model="year" placeholder="西暦で" />
           年
           <select name="month" v-model="month">
             <option value="1">1</option>
@@ -116,11 +116,12 @@
       </button>
     </div>
   </div>
-
+  <div class="guide">
+    <h2>最近書いた日記（更新すると消える）</h2>
+  </div>
   <div class="views">
-    <h2>最近の日記（メインを別ページにやる）</h2>
     <div class="posts" v-for="(post, index) in posts" :key="index">
-      ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー<br />
+      ーーーーーーーーーーーーーーーーーーーーーーーーーーー<br />
       <h3>
         日付：{{ post.year }}年{{ post.month }}月{{ post.date }}日（{{
           post.youbi
@@ -132,7 +133,8 @@
       <br />
       {{ post.content }}
       <h4>作成日時：{{ post.createdAt }}</h4>
-      <button v-on:click="deletePost(index)">削除</button>
+      <button v-on:click="deletePost(index)">削除</button><br />
+      ーーーーーーーーーーーーーーーーーーーーーーーーーーー
     </div>
   </div>
 </template>
@@ -171,18 +173,34 @@ export default {
       this.posts.sort(function (a, b) {
         return a.dateForSort > b.dateForSort ? -1 : 1
       })
-      localStorage.setItem(
-        "diarylist", //これがキー
-        JSON.stringify(this.posts)
-      )
+      if (localStorage.getItem("posts") === []) {
+        localStorage.setItem(
+          "posts", //これがキー
+          JSON.stringify(this.posts)
+        )
+      } else {
+        JSON.parse(localStorage.getItem("posts")).push({
+          year: this.year,
+          month: this.month,
+          date: this.date,
+          youbi: this.youbi,
+          dateForSort: new Date(this.year + "-" + this.month + "-" + this.date),
+          theme: this.theme,
+          weather: this.weather,
+          point: this.point,
+          content: this.post,
+          createdAt: new Date(),
+        })
+        localStorage.setItem("posts", JSON.stringify(this.posts))
+      }
     },
-    deletePost(index) {
-      this.posts.splice(index, 1)
-      localStorage.setItem(
-        "diarylist", //これがキー
-        JSON.stringify(this.posts)
-      )
-    },
+  },
+  deletePost(index) {
+    this.posts.splice(index, 1)
+    localStorage.setItem(
+      "posts", //これがキー
+      JSON.stringify(this.posts)
+    )
   },
   computed: {
     Active() {
@@ -205,6 +223,9 @@ export default {
 </script>
 
 <style>
+.guide {
+  text-align: center;
+}
 .a {
   text-align: center;
 }
@@ -231,9 +252,13 @@ export default {
   padding: 5px;
   background-color: khaki;
   text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-color: brown;
 }
 .views {
   text-align: center;
+  justify-content: center;
 }
 .posts {
   justify-content: center;
