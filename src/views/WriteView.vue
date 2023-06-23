@@ -156,6 +156,9 @@ export default {
       posts: [],
     }
   },
+  mounted() {
+    this.posts = JSON.parse(localStorage.getItem("posts"))
+  },
   methods: {
     Post() {
       this.posts.push({
@@ -173,34 +176,15 @@ export default {
       this.posts.sort(function (a, b) {
         return a.dateForSort > b.dateForSort ? -1 : 1
       })
-      if (localStorage.getItem("posts") === []) {
-        localStorage.setItem(
-          "posts", //これがキー
-          JSON.stringify(this.posts)
-        )
-      } else {
-        JSON.parse(localStorage.getItem("posts")).push({
-          year: this.year,
-          month: this.month,
-          date: this.date,
-          youbi: this.youbi,
-          dateForSort: new Date(this.year + "-" + this.month + "-" + this.date),
-          theme: this.theme,
-          weather: this.weather,
-          point: this.point,
-          content: this.post,
-          createdAt: new Date(),
-        })
-        localStorage.setItem("posts", JSON.stringify(this.posts))
-      }
+      localStorage.setItem("posts", JSON.stringify(this.posts))
     },
-  },
-  deletePost(index) {
-    this.posts.splice(index, 1)
-    localStorage.setItem(
-      "posts", //これがキー
-      JSON.stringify(this.posts)
-    )
+    deletePost(index) {
+      this.posts.splice(index, 1)
+      localStorage.setItem(
+        "posts", //これがキー
+        JSON.stringify(this.posts)
+      )
+    },
   },
   computed: {
     Active() {
