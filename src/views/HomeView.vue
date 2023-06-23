@@ -14,7 +14,7 @@
           <div id="input">
             <div class="inputContent">
               <input
-                v-model.number="inputContent"
+                v-model="inputContent"
                 placeholder="数字を入力してください"
                 oninput="value=value.replace(/[^0-9.]/g,'')"
               />
@@ -30,7 +30,9 @@
         <p>占ってみませんか？</p>
 
         <div class="feedback">
-          <div>{{ feedback2 }}</div>
+          <div class="feedbackcontainer">
+            <div>{{ feedback }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -79,24 +81,52 @@ export default {
     return {
       uranai: require(`@/views/uranai.jpg`),
       feedback: "",
+      //inputContent: "",
       results: [
         {
-          feedback: "1",
+          feedback: `「空亡」：運勢が悪く、自分では考えが決まらず、うまくいかないので、他人の意見をたくさん聞いて、勝手に判断しないようにしましょう。
+金運がうまくいかないのは、金を守ることが大切だ。
+感情では争いが多い、あるいは他人の介入で争いが生じる。
+脾胃や神経系に問題が生じる可能性が高い。
+今は困難な境遇にあり、目標を達成することは難しい。`,
         },
         {
-          feedback: "1",
+          feedback: `
+          「大安」：
+
+          今のところ運勢が良く、安定して成長ができる。
+          感情面は女性にとって感情が順調で、男性にとって感情は安定しているが、新鮮さがないために小さな問題が発生してしまう可能性が高い。
+          仕事が安定していて、働きすぎて病気にならないように気をつけてね。`,
         },
         {
-          feedback: "1",
+          feedback: `「留連」：現在運勢が低迷しており、気分が悪く、仕事をするときに邪魔されてしまう。
+金運が影響を受けるのは、他人の影響を受ける可能性が高い。
+感情面では二人ともコミュニケーションが悪く、あるいは一方が強すぎて感情がバランスが取れない。
+事業がうまくいかず、職場でトラブルを起こしやすい。
+体が少し病気になったり、ストレスが大きすぎて病気になりやすい。`,
         },
         {
-          feedback: "1",
+          feedback: `「速喜」：運勢がだんだん良くなってきて、積極的に行動すれば成功できる。
+金運はだんだんよくなってきたが、盲目的に追求してはいけず、のめり込んでしまいがちだ。
+恋が始めたばかりならラブラブの間に入るが、恋の中期にはトラブルが生じてしまう。
+仕事は効率的だが、書類の管理に注意しなければならない。
+心臓、血液循環あるいは頭部には若干の問題があるが、問題は大きくない。`,
         },
         {
-          feedback: "1",
+          feedback: `「赤口」：運勢は不明だが、大きな計画があれば早く実施して、遅延せずに成功できるが、細かいことでは成功しにくい。
+金運がふらふらして定まらない。お金を求めるのは容易いことではない。
+感情紛争が多く、女性なら病気がある。
+事業は文職がうまくいかない。
+胸、気管などいくつかの問題があり、流行疾患にも感染しやすい。
+
+君、今は困っているかな。`,
         },
         {
-          feedback: "1",
+          feedback: `「小吉」：運勢がいいので、今のままではますます良くなる！
+金運もいいし、他人の影響を受けて金運が良くなるかもしれない。
+現在恋人がいないけど、他人の紹介で知り合いになれるが、恋があれば感情はうまくいく。
+肝胆と消化器系にはいくつかの問題があるが、大したことではない。
+あなたが待っている人がもうすぐ着くよ。`,
         },
       ],
     }
@@ -122,16 +152,28 @@ export default {
       alert(`
       注意事項：
 
-      急ぎがなければ占めず，用事がなければ占わず，動かずも占わず。
+      急ぎがなければ占わず，用事がなければ占わず，動かずも占わず。
 
      （結果はただの参考になること）`)
     },
-    getResult(result) {
-      const sum = this.inputContent.reduce((sumValue, cur) => (sumValue += cur))
-      const lenCount =
-        this.inputContent.length === 1 ? 0 : this.inputContent.length - 1
-      let option = (sum - lenCount) % 6 === 0 ? 6 : ((sum - lenCount) % 6) - 1
-      this.feedback = result.feedback[option]
+    getResult() {
+      const len = this.inputContent.length
+      let sum = 0
+      for (let i = 0; i < len; i++) {
+        sum += Number(this.inputContent[i])
+      }
+      if (sum < 3) {
+        alert(
+          `
+  もう一度入力してください。
+
+計算の関係なので、占いができない数字もありますので、ご了承ください。`
+        )
+      } else {
+        const lenCount = len - 1
+        const option = (sum - lenCount) % 6
+        this.feedback = this.results[option].feedback
+      }
     },
   },
 }
@@ -269,7 +311,7 @@ export default {
 }
 .explain {
   margin-top: 0px;
-  margin-left: 55px;
+  margin-left: 65px;
 }
 .start {
   margin-top: 10px;
@@ -280,23 +322,35 @@ export default {
   flex-direction: row;
 }
 .attention {
-  margin-left: 20px;
+  margin-left: 40px;
   margin-top: 0px;
 }
 .quiz {
-  margin-left: 250px;
+  margin-left: 270px;
   font-size: 20px;
   font-family: "Courier New", Courier, monospace;
 }
 .feedback {
+  display: flex;
   margin-left: 250px;
   width: 500px;
   height: 200px;
   background-color: burlywood;
   border-radius: 20px;
+  font-weight: bold;
 }
 .inputContent {
   margin-left: 125px;
   width: 150px;
+}
+.feedbackcontainer {
+  display: flex;
+
+  width: 400px;
+  height: 150px;
+  margin-top: 40px;
+  border-radius: 20px;
+  margin-left: 50px;
+  font-size: 15px;
 }
 </style>
