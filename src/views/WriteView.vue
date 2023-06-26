@@ -117,10 +117,11 @@
     </div>
   </div>
   <div class="guide">
-    <h2>最近書いた日記（更新すると消える）</h2>
+    <h2>直近の日記</h2>
+    <h5>更新して表示</h5>
   </div>
   <div class="views">
-    <div class="posts" v-for="(post, index) in posts" :key="index">
+    <div class="posts" v-for="post of limitCount" :key="post">
       ーーーーーーーーーーーーーーーーーーーーーーーーーーー<br />
       <h3>
         日付：{{ post.year }}年{{ post.month }}月{{ post.date }}日（{{
@@ -152,12 +153,16 @@ export default {
       point: "",
       content: "",
       createdAt: "",
+
       post: "",
       posts: [],
     }
   },
   mounted() {
     this.posts = JSON.parse(localStorage.getItem("posts"))
+    this.posts.sort(function (a, b) {
+      return a.dateForSort > b.dateForSort ? -1 : 1
+    })
   },
   methods: {
     Post() {
@@ -187,6 +192,9 @@ export default {
     },
   },
   computed: {
+    limitCount() {
+      return this.posts.slice(0, 3)
+    },
     Active() {
       if (
         this.year === "" ||

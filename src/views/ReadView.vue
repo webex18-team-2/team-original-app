@@ -1,5 +1,6 @@
 <template>
   <h1>日記一覧</h1>
+  <h3>日付の順にならない場合は何度か更新してください。</h3>
   <div class="views">
     <div class="posts" v-for="(post, index) in posts" :key="index">
       ーーーーーーーーーーーーーーーーーーーーーーーーーーー<br />
@@ -24,11 +25,14 @@
 export default {
   data() {
     return {
-      posts: localStorage.posts,
+      posts: localStorage.getItem("posts"),
     }
   },
   mounted() {
     this.posts = JSON.parse(localStorage.getItem("posts"))
+    this.posts.sort(function (a, b) {
+      return a.dateForSort > b.dateForSort ? -1 : 1
+    })
   },
   methods: {
     deletePost(index) {
