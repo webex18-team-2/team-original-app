@@ -41,7 +41,7 @@ export default {
           {
             label: "Data One",
             backgroundColor: "#f87979",
-            data: [],
+            data: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
           },
         ],
       },
@@ -61,14 +61,6 @@ export default {
     } else {
       console.error("Invalid diarylist data.")
     }
-  },
-  created() {
-    const diarylist = [
-      { date: "2023-06-25", point: 60 },
-      { date: "2023-06-26", point: 80 },
-      { date: "2023-06-27", point: 35 },
-    ]
-    localStorage.setItem("diarylist", JSON.stringify(diarylist))
   },
 }
 </script>
