@@ -1,7 +1,7 @@
 <template>
   <div class="analysis">
     <h1>分析</h1>
-    <Line :data="data" :options="options" />
+    <Line v-if="loaded" :data="data" :options="options" />
   </div>
 </template>
 
@@ -34,31 +34,49 @@ export default {
   },
   data() {
     return {
+      loaded: false,
       data: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
+        labels: [],
         datasets: [
           {
             label: "Data One",
             backgroundColor: "#f87979",
-            data: [40, 39, 10, 40, 39, 80, 40],
+            data: [],
           },
         ],
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
       },
     }
+  },
+  mounted() {
+    const diarylist = JSON.parse(localStorage.getItem("diarylist")) || []
+    if (Array.isArray(diarylist)) {
+      diarylist.forEach((diary) => {
+        this.data.labels.unshift(diary.date)
+        this.data.datasets[0].data.unshift(diary.point)
+      }),
+        (this.loaded = true)
+    } else {
+      console.error("Invalid diarylist data.")
+    }
+  },
+  created() {
+    const diarylist = [
+      { date: "2023-06-25", point: 60 },
+      { date: "2023-06-26", point: 80 },
+      { date: "2023-06-27", point: 35 },
+    ]
+    localStorage.setItem("diarylist", JSON.stringify(diarylist))
   },
 }
 </script>
 
-<style></style>
+<style>
+.analysis {
+  height: 800px;
+  width: 1000px;
+  margin: 0 auto;
+}
+</style>
