@@ -7,7 +7,7 @@
       <div class="month_and_theme_and_weather">
         <h4>
           日付：
-          <input type="number" min="2023" v-model="year" placeholder="西暦で" />
+          <input type="number" v-model="year" placeholder="西暦で" />
           年
           <select name="month" v-model="month">
             <option value="1">1</option>
@@ -116,11 +116,13 @@
       </button>
     </div>
   </div>
-
+  <div class="guide">
+    <h2>直近の日記</h2>
+    <h5>更新して表示</h5>
+  </div>
   <div class="views">
-    <h2>最近の日記（メインを別ページにやる）</h2>
-    <div class="posts" v-for="(post, index) in posts" :key="index">
-      ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー<br />
+    <div class="posts" v-for="post of limitCount" :key="post">
+      ーーーーーーーーーーーーーーーーーーーーーーーーーーー<br />
       <h3>
         日付：{{ post.year }}年{{ post.month }}月{{ post.date }}日（{{
           post.youbi
@@ -132,7 +134,8 @@
       <br />
       {{ post.content }}
       <h4>作成日時：{{ post.createdAt }}</h4>
-      <button v-on:click="deletePost(index)">削除</button>
+      <button v-on:click="deletePost(index)">削除</button><br />
+      ーーーーーーーーーーーーーーーーーーーーーーーーーーー
     </div>
   </div>
 </template>
@@ -150,9 +153,16 @@ export default {
       point: "",
       content: "",
       createdAt: "",
+
       post: "",
       posts: [],
     }
+  },
+  mounted() {
+    this.posts = JSON.parse(localStorage.getItem("posts"))
+    this.posts.sort(function (a, b) {
+      return a.dateForSort > b.dateForSort ? -1 : 1
+    })
   },
   methods: {
     Post() {
@@ -171,20 +181,20 @@ export default {
       this.posts.sort(function (a, b) {
         return a.dateForSort > b.dateForSort ? -1 : 1
       })
-      localStorage.setItem(
-        "diarylist", //これがキー
-        JSON.stringify(this.posts)
-      )
+      localStorage.setItem("posts", JSON.stringify(this.posts))
     },
     deletePost(index) {
       this.posts.splice(index, 1)
       localStorage.setItem(
-        "diarylist", //これがキー
+        "posts", //これがキー
         JSON.stringify(this.posts)
       )
     },
   },
   computed: {
+    limitCount() {
+      return this.posts.slice(0, 3)
+    },
     Active() {
       if (
         this.year === "" ||
@@ -205,6 +215,9 @@ export default {
 </script>
 
 <style>
+.guide {
+  text-align: center;
+}
 .a {
   text-align: center;
 }
@@ -231,9 +244,13 @@ export default {
   padding: 5px;
   background-color: khaki;
   text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-color: brown;
 }
 .views {
   text-align: center;
+  justify-content: center;
 }
 .posts {
   justify-content: center;
