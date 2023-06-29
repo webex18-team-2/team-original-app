@@ -160,12 +160,17 @@ export default {
   },
   mounted() {
     this.posts = JSON.parse(localStorage.getItem("posts"))
-    this.posts.sort(function (a, b) {
-      return a.dateForSort > b.dateForSort ? -1 : 1
-    })
+    if (this.posts) {
+      this.posts.sort(function (a, b) {
+        return a.dateForSort > b.dateForSort ? -1 : 1
+      })
+    }
   },
   methods: {
     Post() {
+      if (!this.posts) {
+        this.posts = [] // nullの場合は空の配列として初期化
+      }
       this.posts.push({
         year: this.year,
         month: this.month,
@@ -193,7 +198,11 @@ export default {
   },
   computed: {
     limitCount() {
-      return this.posts.slice(0, 3)
+      if (this.posts) {
+        return this.posts.slice(0, 3)
+      } else {
+        return []
+      }
     },
     Active() {
       if (

@@ -51,15 +51,15 @@ export default {
     }
   },
   mounted() {
-    const diarylist = JSON.parse(localStorage.getItem("diarylist")) || []
-    if (Array.isArray(diarylist)) {
-      diarylist.forEach((diary) => {
-        this.data.labels.unshift(diary.date)
-        this.data.datasets[0].data.unshift(diary.point)
-      }),
-        (this.loaded = true)
+    const posts = JSON.parse(localStorage.getItem("posts")) || []
+    if (Array.isArray(posts)) {
+      posts.forEach((post) => {
+        this.data.labels.unshift(post.date)
+        this.data.datasets[0].data.unshift(post.point)
+      })
+      this.loaded = true
     } else {
-      console.error("Invalid diarylist data.")
+      console.error("Invalid posts data.")
     }
   },
 }
