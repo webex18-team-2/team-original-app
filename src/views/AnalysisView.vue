@@ -1,33 +1,74 @@
 <template>
   <div class="analysis">
-    <h2>直近7日</h2>
-    <div class="7data" v-for="posts of weekChart" :key="posts"></div>
-    <h2>直近30日</h2>
-    <div class="30data" v-for="posts of monthChart" :key="posts"></div>
+    <h1>分析</h1>
+    <Line v-if="loaded" :data="data" :options="options" />
   </div>
 </template>
+
 <script>
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js"
+import { Line } from "vue-chartjs"
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
 export default {
+  name: "App",
+  components: {
+    Line,
+  },
   data() {
     return {
-      posts: localStorage.getItem("posts"),
+      loaded: false,
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: "Data One",
+            backgroundColor: "#f87979",
+            data: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+      },
     }
   },
   mounted() {
-    this.posts = JSON.parse(localStorage.getItem("posts"))
-    this.posts.sort(function (c, d) {
-      return c.point > d.point ? -1 : 1
-    })
-  },
-  computed: {
-    // eslint-disable-next-line vue/return-in-computed-property
-    weekChart() {
-      //return this.posts.slice(0, 7)
-    },
-    // eslint-disable-next-line vue/return-in-computed-property
-    monthChart() {
-      //return this.post.slice(0, 30)
-    },
+    const posts = JSON.parse(localStorage.getItem("posts")) || []
+    if (Array.isArray(posts)) {
+      posts.forEach((post) => {
+        this.data.labels.unshift(post.date)
+        this.data.datasets[0].data.unshift(post.point)
+      })
+      this.loaded = true
+    } else {
+      console.error("Invalid posts data.")
+    }
   },
 }
 </script>
+
+<style>
+.analysis {
+  height: 800px;
+  width: 1000px;
+  margin: 0 auto;
+}
+</style>
